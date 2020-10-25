@@ -1,15 +1,18 @@
 import styles from '../../styles/Home.module.scss'
 import ReactMarkdown from 'react-markdown'
 
-export default function Article({title, content, tags}) {
+export default function Article({title, content, tags, cover}) {
   return(
     <div className={styles.articleWrapper}>
+      {cover &&
+        <img src={cover} />
+      }
       <h3 className={styles.title}>{title}</h3>
       <ReactMarkdown>{content}</ReactMarkdown>
-      <ul>
+      <ul className={styles.tagsWrapper}>
         {tags.map((tag, key) => {
           return(
-            <li key={key}>#{tag}</li>
+            <li key={key} className={styles.tag}>#{tag}</li>
           )
         })}
       </ul>
@@ -23,6 +26,7 @@ export async function getServerSideProps({ params }) {
 
   return {
     props: {
+      cover: json.cover_image,
       title: json.title,
       content: json.body_markdown,
       tags: json.tags
