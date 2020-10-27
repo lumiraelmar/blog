@@ -20,7 +20,22 @@ export default function Article({title, content, tags, cover}) {
   )
 }
 
-export async function getServerSideProps({ params }) {
+export async function getStaticPaths() {
+const data = await fetch('https://dev.to/api/articles?tags=css,react&top=1');
+const json = await data.json();
+
+//const paths = json.map(path=> `/articulo/${path.id}`)
+const paths = json.map((path) => {
+  return `/articles/${path.id}`
+})
+
+  return {
+    paths: paths,
+    fallback: false
+  }
+}
+
+export async function getStaticProps({ params }) {
   const data = await fetch(`https://dev.to/api/articles/${params.id}`);
   const json = await data.json();
 
